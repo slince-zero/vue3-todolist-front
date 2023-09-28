@@ -1,26 +1,38 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="todo">
+    <div class="content">
+      <div>
+        <input type="text" v-model="newTodo" />
+        <button @click="addTodo">添加</button>
+        <button @click="searchTodo">查询</button>
+      </div>
+
+      <div>
+        <ul>
+          <li v-for="todo in todoData">
+            <label style="margin-right: 5px">{{ todo }}</label>
+            <button @click="todoDel(todo)">删除</button>
+            <button @click="todoEdit(todo)">编辑</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.todo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
 }
 </style>
