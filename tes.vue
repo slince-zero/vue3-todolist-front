@@ -22,12 +22,12 @@
       </table>
       <div>
         name:
-        <input v-model="formData.name" type="text" />
+        <input v-model="tempData.name" type="text" />
         age:
-        <input v-model="formData.age" type="text" />
+        <input v-model="tempData.age" type="text" />
         address:
-        <input v-model="formData.address" type="text" />
-        <button @click="todoAddOrEdit(formData)">
+        <input v-model="tempData.address" type="text" />
+        <button @click="todoAddOrEdit(tempData)">
           {{ editFlag ? '提交' : '添加' }}
         </button>
       </div>
@@ -41,7 +41,6 @@
     deleteOneData,
     addOneData,
     updateOneData,
-    findData,
   } from './api/index.js'
   import { ref, onMounted } from 'vue'
   const todoData = ref([])
@@ -70,61 +69,29 @@
     age: '',
     address: '',
   })
-  // 临时存储
   const tempData = ref({
     name: '',
     age: '',
     address: '',
   })
-  const todoAddOrEdit = async (form) => {
+  const todoAddOrEdit = async (tempData) => {
     if (editFlag.value) {
       // 修改
-      tempData.value = { ...form }
-      console.log(JSON.stringify(tempData.value))
-      const res = await updateOneData(
-        tempData.value.id,
-        JSON.stringify(tempData.value),
-      )
+      const res = await updateOneData(tempData)
       getData()
-      formData.value = {}
-      editFlag.value = false
-      // console.log(res)
     } else {
       // 添加
-      const res = await addOneData(form)
+      const res = await addOneData(tempData)
       getData()
-      formData.value = {}
       // console.log(res)
     }
+    tempData.value = {} // 清空临时数据
   }
 
   // 修改一条数据
   let editFlag = ref(false) // 用于判断是否要修改
   const todoEdit = async (todo) => {
     editFlag.value = true
-    formData.value = todo
+    tempData.value = { ...todo } // 使用临时数据存储修改前的数据
   }
 </script>
-
-<style>
-  .todo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 100px;
-  }
-  .content {
-    display: flex;
-    flex-direction: column;
-  }
-  table {
-    width: 300px;
-    height: 300px;
-    border-collapse: collapse;
-  }
-  th,
-  td {
-    border: 1px solid;
-    text-align: center;
-  }
-</style>
